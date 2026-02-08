@@ -1,0 +1,35 @@
+# railway.toml
+#
+# Railway template configuration for "OpenClaw Durable".
+# Deploys OpenClaw gateway with automatic backup to a Railway Bucket.
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[variables]
+PORT = "8080"
+
+# Gateway auth (auto-generated 64-char token).
+# OPENCLAW_GATEWAY_TOKEN = ""
+
+# Setup wizard password (user must set).
+# SETUP_PASSWORD = ""
+
+# State dir on the persistent volume.
+OPENCLAW_STATE_DIR = "/data/.openclaw"
+OPENCLAW_WORKSPACE_DIR = "/data/workspace"
+
+# Backup configuration.
+# These are auto-injected by Railway when a Bucket is attached:
+#   BUCKET, ACCESS_KEY_ID, SECRET_ACCESS_KEY, ENDPOINT, REGION
+#
+# Optional overrides:
+BACKUP_ENABLED = "true"
+BACKUP_INTERVAL_SEC = "300"
+BACKUP_S3_PREFIX = "openclaw-state"
