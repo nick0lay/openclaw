@@ -44,7 +44,7 @@ trap cleanup TERM INT
 # ── Step 0: Ensure volume directories exist ─────────────────────────
 
 STATE_DIR="${OPENCLAW_STATE_DIR:-/data/.openclaw}"
-mkdir -p "$STATE_DIR" "${OPENCLAW_WORKSPACE_DIR:-/data/workspace}" /tmp/openclaw-sqlite-backup
+mkdir -p "$STATE_DIR" /tmp/openclaw-sqlite-backup
 
 # ── Step 0.5: Inject Railway-specific gateway config ─────────────────
 #

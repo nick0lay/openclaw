@@ -80,7 +80,6 @@ RUN mkdir -p /data /tmp/openclaw-sqlite-backup \
 
 ENV NODE_ENV=production
 ENV OPENCLAW_STATE_DIR=/data/.openclaw
-ENV OPENCLAW_WORKSPACE_DIR=/data/workspace
 
 # Note: No USER directive — entrypoint runs as root to fix volume permissions,
 # then the gateway process itself runs safely. Railway volumes mount as root

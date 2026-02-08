@@ -18,12 +18,8 @@ PORT = "8080"
 # Gateway auth (auto-generated 64-char token).
 # OPENCLAW_GATEWAY_TOKEN = ""
 
-# Setup wizard password (user must set).
-# SETUP_PASSWORD = ""
-
-# State dir on the persistent volume.
+# State dir on the persistent volume (workspace lives inside at workspace/).
 OPENCLAW_STATE_DIR = "/data/.openclaw"
-OPENCLAW_WORKSPACE_DIR = "/data/workspace"
 
 # Backup configuration.
 # These are auto-injected by Railway when a Bucket is attached:
