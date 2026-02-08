@@ -46,14 +46,24 @@ trap cleanup TERM INT
 STATE_DIR="${OPENCLAW_STATE_DIR:-/data/.openclaw}"
 mkdir -p "$STATE_DIR" /tmp/openclaw-sqlite-backup
 
-# ── Step 0.5: Inject Railway-specific gateway config ─────────────────
+# ── Step 1: Restore from bucket (if volume is empty) ───────────────
+#
+# Restore runs BEFORE config injection so that a fresh state dir
+# (e.g., switching OPENCLAW_STATE_DIR to trigger a restore) is not
+# blocked by inject_railway_config creating openclaw.json first.
+
+if [ "$BACKUP_ENABLED" = "true" ] && [ -f "$BACKUP_SCRIPT" ]; then
+  echo "[entrypoint] Running restore check..."
+  bash "$BACKUP_SCRIPT" restore || echo "[entrypoint] Restore skipped or failed (non-fatal)."
+fi
+
+# ── Step 2: Inject Railway-specific gateway config ─────────────────
 #
 # Railway's reverse proxy forwards requests from internal IPs (100.64.0.0/10)
 # with X-Forwarded-For headers. The gateway sees these as untrusted proxy
 # connections and requires device pairing for the Control UI.
 #
-# We disable device auth for the Control UI (token/password auth still applies)
-# and set trustedProxies so the gateway correctly resolves client IPs.
+# We disable device auth for the Control UI (token/password auth still applies).
 
 CONFIG_FILE="${STATE_DIR}/openclaw.json"
 
@@ -61,7 +71,6 @@ inject_railway_config() {
   if [ -f "$CONFIG_FILE" ]; then
     echo "[entrypoint] Merging Railway config into existing ${CONFIG_FILE}..."
     # Use node to merge JSON safely (preserves user settings).
-    # Ensures: device auth disabled (Railway proxy), memory plugin enabled.
     node -e "
       const fs = require('fs');
       const cfg = JSON.parse(fs.readFileSync('${CONFIG_FILE}', 'utf8'));
@@ -95,14 +104,7 @@ CFGEOF
 
 inject_railway_config
 
-# ── Step 1: Restore from bucket (if volume is empty) ───────────────
-
-if [ "$BACKUP_ENABLED" = "true" ] && [ -f "$BACKUP_SCRIPT" ]; then
-  echo "[entrypoint] Running restore check..."
-  bash "$BACKUP_SCRIPT" restore || echo "[entrypoint] Restore skipped or failed (non-fatal)."
-fi
-
-# ── Step 2: Start OpenClaw gateway ─────────────────────────────────
+# ── Step 3: Start OpenClaw gateway ─────────────────────────────────
 
 echo "[entrypoint] Starting OpenClaw gateway..."
 
@@ -111,7 +113,7 @@ GATEWAY_PID=$!
 
 echo "[entrypoint] Gateway started (PID $GATEWAY_PID)."
 
-# ── Step 3: Start backup loop (background) ─────────────────────────
+# ── Step 4: Start backup loop (background) ─────────────────────────
 
 if [ "$BACKUP_ENABLED" = "true" ] && [ -f "$BACKUP_SCRIPT" ]; then
   echo "[entrypoint] Starting backup sync loop..."
