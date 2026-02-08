@@ -2,9 +2,11 @@
 
 Deploy OpenClaw on Railway with persistent state backed by a Railway Bucket (S3-compatible storage).
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/openclaw-moltbot-clawdbot-data-backupres?referralCode=CG2P3Y&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
 ## Quick Start
 
-1. Deploy the template on Railway.
+1. [Deploy the template on Railway](https://railway.com/deploy/openclaw-moltbot-clawdbot-data-backupres?referralCode=CG2P3Y&utm_medium=integration&utm_source=template&utm_campaign=generic).
 2. Set the **root directory** to `railway/` in service settings.
 3. Attach a **Volume** mounted at `/data`.
 4. Attach a **Bucket** for automatic backup sync.
