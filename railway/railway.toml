@@ -5,6 +5,7 @@
 
 [build]
 builder = "dockerfile"
+dockerfilePath = "/railway/Dockerfile"
 
 [deploy]
 healthcheckPath = "/"
