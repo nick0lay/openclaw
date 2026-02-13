@@ -5,7 +5,6 @@
 
 [build]
 builder = "dockerfile"
-dockerfilePath = "Dockerfile"
 
 [deploy]
 healthcheckPath = "/"
@@ -19,13 +18,13 @@ PORT = "8080"
 # OPENCLAW_GATEWAY_TOKEN = ""
 
 # State dir on the persistent volume (workspace lives inside at workspace/).
-OPENCLAW_STATE_DIR = "/data/.openclaw"
+# OPENCLAW_STATE_DIR = "/data/.openclaw"
 
 # Backup configuration.
 # These are auto-injected by Railway when a Bucket is attached:
 #   BUCKET, ACCESS_KEY_ID, SECRET_ACCESS_KEY, ENDPOINT, REGION
 #
 # Optional overrides:
-BACKUP_ENABLED = "true"
-BACKUP_INTERVAL_SEC = "300"
-BACKUP_S3_PREFIX = "openclaw-state"
+# BACKUP_ENABLED = "true"
+# BACKUP_INTERVAL_SEC = "300"
+# BACKUP_S3_PREFIX = "openclaw-state"
